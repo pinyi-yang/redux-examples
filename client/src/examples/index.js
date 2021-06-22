@@ -1,3 +1,4 @@
 export const examples = {
-    Counter: require("./Counter/Counter")
+    Counter: require("./Counter/Counter"),
+    Posts: require("./Post/PostsList")
 }

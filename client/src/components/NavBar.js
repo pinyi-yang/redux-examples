@@ -8,7 +8,7 @@ export default function NavBar() {
         width: "fit-content",
         borderRight: "1px black solid",
         padding: 5,
-        margin: 5
+        margin: 5,
     }
     let index = 0;
     for (let name in examples) {
@@ -21,7 +21,7 @@ export default function NavBar() {
     }
 
     return (
-        <div style={{background: "lightgrey"}}>
+        <div style={{background: "lightgrey", display: "flex"}}>
             {links}
         </div>
     )
