@@ -1,9 +1,8 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import NavBar from "./components/NavBar";
+import Home from './Home';
 import { Counter } from "./examples/Counter/Counter";
-import { Counter2 } from "./examples/Counter2/Counter2"
 
 function App() {
   return (
@@ -11,13 +10,10 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-            <h1>Home Page</h1>
-            <NavBar/>
+            <Home/>
           </Route>
           <Route exact path="/counter">
-            <Counter /><hr/>
-            <h2>With Payload prepare</h2>
-            <Counter2 />
+            <Counter />
           </Route>
         </Switch>
       </Router>
