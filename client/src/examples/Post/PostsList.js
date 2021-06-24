@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { PostAuthor } from "./PostAuthor";
 import { ReactionButtons } from "./ReactionButtons";
 
+import { selectAllPosts, fetchPosts } from "./postSlice";
+
 export function PostsList() {
-    const posts = useSelector(state => state.posts);
+    const dispatch = useDispatch()
+    const posts = useSelector(selectAllPosts);
+
+    const postStatus = useSelector(state => state.posts.status);
+
+    // useEffect(() => {
+    //     if (postStatus === "idle") {
+    //         dispatch(fetchPosts())
+    //     }
+    // }, [postStatus, dispatch])
 
     const renderedPosts = posts.map(post => {
         return (

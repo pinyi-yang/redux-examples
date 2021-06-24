@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const increaseAsync = createAsyncThunk("counter/increaseAsync", async delay => {
-    const result = await new Promise((reesolve, reject) => {
+    const result = await new Promise((resolve, reject) => {
         setTimeout(() => {
-            reesolve(1)
+            resolve(1)
         }, delay)
     })
     return result;
