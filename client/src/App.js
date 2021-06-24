@@ -15,6 +15,7 @@ function App() {
     <div className="App">
       <h1>Redux Examples</h1>
       <Router>
+        <NavBar />
         <Switch>
           <Route exact path="/">
             <Home/>
@@ -25,7 +26,6 @@ function App() {
           <Route exact path="/posts" 
             render = { () => (
               <React.Fragment>
-                <NavBar />
                 <AddPostForm />
                 <PostsList />
               </React.Fragment>

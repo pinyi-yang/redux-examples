@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { nanoid } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postAdded } from "./postSlice";
 
 export const AddPostForm = () => {
+    const users = useSelector(state => state.users)
+
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [userId, setUserId] = useState("");
     const dispatch = useDispatch();
 
     const onTitleChange = e => setTitle(e.target.value);
@@ -19,6 +22,14 @@ export const AddPostForm = () => {
         }
     }
 
+    const onAuthorSelectChanged = e => { setUserId(e.target.value) };
+
+    const usersOptions = users.map(user => (
+        <option value={user.id} key={user.id}>
+            {user.name}
+        </option>
+    ))
+
     return (
         <section>
             <h2>Add a New Post</h2>
@@ -30,6 +41,11 @@ export const AddPostForm = () => {
                     value={title}
                     onChange={onTitleChange}
                 />
+                <label htmlFor="postAuthor">Author: </label>
+                <select name="postAuthor" id="postAuthor" value={userId} onChange={onAuthorSelectChanged}>
+                    <option value=""></option>
+                    {usersOptions}
+                </select>
                 <label htmlFor="postContent">Content: </label>
                 <input type="text"
                     id = "postContent"
