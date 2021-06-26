@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { postAdded } from "./postSlice";
+import { addPost } from "./postSlice";
 import { selectAllUsers } from "../Users/userSlice";
 
 export const AddPostForm = () => {
@@ -16,8 +15,8 @@ export const AddPostForm = () => {
     const onContentChange = e => setContent(e.target.value);
 
     const onSavePostClick = () => {
-        if (title && content) {
-            dispatch(postAdded(title, content));
+        if (title && content && userId) {
+            dispatch(addPost({title, content, userId}));
             setTitle("");
             setContent("");
         }
@@ -54,7 +53,7 @@ export const AddPostForm = () => {
                     value = { content }
                     onChange = { onContentChange }
                 />
-                <button type="button" onClick={onSavePostClick}>Save Post</button>
+                <button type="button" onClick={onSavePostClick} disabled={!(title && content && userId)}>Save Post</button>
             </form>
         </section>
     )

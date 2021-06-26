@@ -12,19 +12,20 @@ export function PostsList() {
 
     const postStatus = useSelector(state => state.posts.status);
 
-    // useEffect(() => {
-    //     if (postStatus === "idle") {
-    //         dispatch(fetchPosts())
-    //     }
-    // }, [postStatus, dispatch])
+    useEffect(() => {
+        console.log("PostsList useEffect; status: ", postStatus)
+        if (postStatus === "idle") {
+            dispatch(fetchPosts())
+        }
+    }, [postStatus, dispatch])
 
     const renderedPosts = posts.map(post => {
         return (
             <article className="post-excerpt" key={post.id}>
                 <h3>{post.title}</h3>
                 <p className="post-content">{post.content.substring(0, 100)}</p>
-                <PostAuthor userId={post.userId} /><br/><br/>
-                <ReactionButtons post={post} /> <br/>
+                <PostAuthor userId={post.UserId} /><br/><br/>
+                {/* <ReactionButtons post={post} /> <br/> */}
                 <Link to={`/posts/${post.id}`} className="button, muted-button">View Post</Link>
             </article>
         )

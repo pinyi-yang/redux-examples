@@ -78,6 +78,8 @@ async function init() {
         }) 
     });
 
+    server.use("/postexample", require("./routes/postexample"));
+
     
     
     server.listen(8080, () => {

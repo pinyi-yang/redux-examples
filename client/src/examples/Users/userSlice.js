@@ -31,7 +31,7 @@ export const userSlice = createSlice({
         builder
             .addCase(fetchUsers.fulfilled, (state, action) => {
                 console.log("fecth users success: ", action)
-                state.status = "succeeded";
+                state.status = "succeeded"; console.log(action.type);
                 state.data = action.payload;
             })
             .addCase(addUser.fulfilled, (state, action) => {
@@ -40,14 +40,14 @@ export const userSlice = createSlice({
                 state.data.push(action.payload);
             })
             .addMatcher(
-                (action) => action.type.endsWith("rejected"),
+                (action) => action.type.endsWith("rejected") && action.type.startsWith("users"),
                 (state, action) => {
                     state.status = "failed";
                     state.error = action.error;
                 }
             )
             .addMatcher(
-                action => action.type.endsWith("pending"),
+                action => action.type.endsWith("pending") && action.type.startsWith("users"),
                 (state, action) => { state.status = "loading" }
             )
     }
