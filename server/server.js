@@ -9,9 +9,9 @@ async function checkDatabaseConnection() {
 		await sequelize.authenticate();
 		console.log('Database connection OK!');
         console.log("sync tables");
-        await sequelize.sync({force: true});
+        await sequelize.sync({});
 
-        const { User } = sequelize.models;
+        // const { User } = sequelize.models;
         
         // await User.findOrCreate({
         //     where: {
@@ -46,13 +46,39 @@ async function checkDatabaseConnection() {
 async function init() {
     await checkDatabaseConnection();
 
+    const { User } = sequelize.models;
+
+    server.use(express.urlencoded({ extended: false }));
+    server.use(express.json());
+
     server.get("/test", function(req, res) {
         res.send("Hello World")
     })
     
-    server.get("/posts", function(req, res) {
+    server.get("/users", function(req, res) {
+        User.findAll().then( users => {
+            res.json(users);
+        }).catch(err => {
+            console.log("GET /users error: ", err);
+            res.status(400).json(err)
+        })
+    });
+
+    server.post("/users", function(req, res) {
+        console.log("POST /users");
+        User.create({
+            name: req.body.name,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        }).then(response => {
+            res.json(response)
+        }).catch(err => {
+            console.log("POST /users error: ", err);
+            res.status(400).json(err)
+        }) 
+    });
+
     
-    })
     
     server.listen(8080, () => {
         console.log("SERVER connected to port 8080`")

@@ -5,6 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from "react-redux";
 import store from "./app/store";
+import { fetchUsers } from "./examples/Users/userSlice"
+
+store.dispatch(fetchUsers())
 
 ReactDOM.render(
   <Provider store={store} >

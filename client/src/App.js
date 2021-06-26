@@ -9,6 +9,8 @@ import { PostsList } from "./examples/Post/PostsList";
 import { AddPostForm } from "./examples/Post/AddPostForm";
 import { SinglePostPage } from './examples/Post/SinglePostPage';
 import { EditPostForm } from './examples/Post/EditPostForm';
+import { UsersList } from "./examples/Users/UsersList";
+import { AddUserForm } from "./examples/Users/AddUserForm"
 
 function App() {
   return (
@@ -33,6 +35,14 @@ function App() {
           />
           <Route exact path="/posts/:postId" component={SinglePostPage} />
           <Route exact path="/editPost/:postId" component={EditPostForm} />
+          <Route exact path="/users" 
+            render = { () => (
+              <React.Fragment>
+                <AddUserForm />
+                <UsersList />
+              </React.Fragment>
+            )}
+          />
         </Switch>
       </Router>
       
