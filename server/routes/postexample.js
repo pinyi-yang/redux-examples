@@ -1,9 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { Post, User } = require("../sequelize").models;
+const { Post, Reaction } = require("../sequelize").models;
 
 router.get("/posts", (req, res) => {
-    Post.findAll().then(posts => {
+    Post.findAll({
+        include: {
+            model: Reaction,
+            as: "reactions"
+        }
+    }).then(posts => {
         res.json(posts)
     }).catch(err => {
         console.log("GET /postexample/posts error: ", err)
@@ -11,19 +16,41 @@ router.get("/posts", (req, res) => {
     })
 });
 
-router.post("/posts", (req, res) => {
+router.post("/posts", async (req, res) => {
     const {title, content, userId} = req.body;
     // should check whether userId exist first.
-    Post.create({
-        title, 
-        content,
-        UserId: userId,
-        createdAt: new Date(),
-        updatedAt: new Date()
-    }).then(post => {
-        res.json(post);
-    }).catch(err => {
+    try {
+        const newPost = await Post.create({
+            title, 
+            content,
+            UserId: userId,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            reactions: {}
+        }, {
+            include: {
+                model: Reaction,
+                as: "reactions"
+            }
+        });
+        console.log("new Post", newPost.toJSON())
+
+        res.json(newPost.toJSON());
+    } catch(err) {
         console.log("POST /postexample/posts error: ", err)
+        res.status(400).json(err);
+    }
+});
+
+router.get("/posts/:postId", (req, res) => {
+    const postId = parseInt(req.params.postId);
+
+    Post.findOne({
+        where: { id: postId }
+    }).then(post => {
+        res.json(post)
+    }).catch(err => {
+        console.log("GET /postexample/posts/:postId error: ", err)
         res.status(400).json(err);
     })
 });

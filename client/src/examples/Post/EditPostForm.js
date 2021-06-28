@@ -4,7 +4,7 @@ import { postUpdated, selectPostById } from "./postSlice";
 import { useHistory } from "react-router-dom";
 
 export const EditPostForm = ({ match }) => {
-    const { postId } = match.params;
+    const postId = parseInt(match.params.postId);
     const history = useHistory()
 
     const post = useSelector(state => 
@@ -18,7 +18,7 @@ export const EditPostForm = ({ match }) => {
     const onTitleChanged = (e) => setTitle(e.target.value);
     const onContentChanged = (e) => setContent(e.target.value);
     const onSavePostClicked = () => {
-        dispatch(postUpdated({id: postId, title, content}));
+        dispatch(postUpdated({postId, title, content}));
         history.push(`/posts/${postId}`)
     };
 

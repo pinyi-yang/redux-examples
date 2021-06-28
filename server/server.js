@@ -8,8 +8,8 @@ async function checkDatabaseConnection() {
 	try {
 		await sequelize.authenticate();
 		console.log('Database connection OK!');
-        console.log("sync tables");
-        await sequelize.sync({});
+        // console.log("sync tables");
+        // await sequelize.sync({force: true});
 
         // const { User } = sequelize.models;
         

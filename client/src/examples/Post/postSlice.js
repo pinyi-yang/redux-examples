@@ -2,8 +2,12 @@ import { createSlice, createAsyncThunk, nanoid } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
-    console.log("fetchPosts")
     const response = await axios.get("/postexample/posts");
+    return response.data;
+});
+
+export const fetchPostById = createAsyncThunk('posts/fetchPostById', async (postId) => {
+    const response = await axios.get(`/postexample/posts/${postId}`);
     return response.data;
 });
 
@@ -11,6 +15,10 @@ export const addPost = createAsyncThunk('posts/addPost', async (data) => {
     const response = await axios.post("/postexample/posts", data);
     return response.data;
 });
+export const updatePost = createAsyncThunk("posts/updatePost", async ({title, content, postId}) => {
+    const response = await axios.put(`/postexample/posts/${postId}`, {title, content});console.log(response)
+    return response.data
+})
 
 export const postsSlice = createSlice({
     name: "posts",
@@ -21,8 +29,8 @@ export const postsSlice = createSlice({
     },
     reducers: {
         postUpdated: (state, action) => {
-            const {id, title, content } = action.payload;
-            const existingPost = state.posts.find(post => post.id === id);
+            const {postId, title, content } = action.payload;
+            const existingPost = state.posts.find(post => post.id === postId);
 
             if (existingPost) {
                 existingPost.title = title;
@@ -44,8 +52,15 @@ export const postsSlice = createSlice({
                 state.status = "succeeded";
                 state.posts = action.payload;
             })
-            .addCase(addPost.fulfilled, (state,action) => {
+            .addCase(addPost.fulfilled, (state, action) => {
                 state.status = "succeeded";
+                state.posts.push(action.payload);
+            })
+            .addCase(updatePost.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                console.log(action.payload)
+                const index = state.posts.find(post => post.id === action.payload.id);
+                state.posts[index] = action.payload;
             })
             .addMatcher(
                 (action) => action.type.endsWith("rejected") && action.type.startsWith("posts"),
@@ -57,6 +72,10 @@ export const postsSlice = createSlice({
             .addMatcher(
                 action => action.type.endsWith("pending") && action.type.startsWith("posts"),
                 (state, action) => { state.status = "loading" }
+            )
+            .addMatcher(
+                action => action.type.endsWith("fulfilled") && action.type.startsWith("posts"),
+                (state, action) => { state.status = "succeeded" }
             )
     }
     
