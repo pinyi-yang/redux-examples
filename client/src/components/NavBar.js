@@ -1,8 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { examples } from "../examples"
+import { examples } from "../examples";
+
+import { useDispatch } from "react-redux";
+import { fetchNotifications } from "../examples/Notifications/notificationSlice";
 
 export default function NavBar() {
+    const dispatch = useDispatch();
     const links = [];
     const style = {
         width: "fit-content",
@@ -23,6 +27,7 @@ export default function NavBar() {
     return (
         <div style={{background: "lightgrey", display: "flex"}}>
             {links}
+            <button onClick={() => dispatch(fetchNotifications())}>Refresh Notifications</button>
         </div>
     )
 }

@@ -11,7 +11,8 @@ import { SinglePostPage } from './examples/Post/SinglePostPage';
 import { EditPostForm } from './examples/Post/EditPostForm';
 import { UsersList } from "./examples/Users/UsersList";
 import { UserPage } from './examples/Users/UserPage';
-import { AddUserForm } from "./examples/Users/AddUserForm"
+import { AddUserForm } from "./examples/Users/AddUserForm";
+import { NotificationsList } from "./examples/Notifications/NotificationsList";
 
 function App() {
   return (
@@ -44,7 +45,8 @@ function App() {
               </React.Fragment>
             )}
           />
-          <Route exct path="/users/:userId" component={ UserPage }/>
+          <Route exact path="/users/:userId" component={ UserPage }/>
+          <Route exact path="/notifications" component={ NotificationsList } />
           <Redirect to="/" />
         </Switch>
       </Router>

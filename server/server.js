@@ -9,31 +9,31 @@ async function checkDatabaseConnection() {
 		await sequelize.authenticate();
 		console.log('Database connection OK!');
         console.log("sync tables");
-        await sequelize.sync({force: true});
+        // await sequelize.sync({force: true});
 
-        const { User } = sequelize.models;
+        // const { User } = sequelize.models;
         
-        await User.findOrCreate({
-            where: {
-                name: "Pinyi Yang"
-            },
-            defaults: {
-                name: "Pinyi Yang",
-                createdAt: new Date(),
-                updatedAt: new Date()
-            }
-        });
+        // await User.findOrCreate({
+        //     where: {
+        //         name: "Pinyi Yang"
+        //     },
+        //     defaults: {
+        //         name: "Pinyi Yang",
+        //         createdAt: new Date(),
+        //         updatedAt: new Date()
+        //     }
+        // });
 
-        await User.findOrCreate({
-            where: {
-                name: "Shadow Nova"
-            },
-            defaults: {
-                name: "Shadow Nova",
-                createdAt: new Date(),
-                updatedAt: new Date()
-            }
-        })
+        // await User.findOrCreate({
+        //     where: {
+        //         name: "Shadow Nova"
+        //     },
+        //     defaults: {
+        //         name: "Shadow Nova",
+        //         createdAt: new Date(),
+        //         updatedAt: new Date()
+        //     }
+        // })
 
         
 	} catch (error) {
