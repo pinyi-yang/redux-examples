@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
@@ -20,17 +20,18 @@ export const updatePost = createAsyncThunk("posts/updatePost", async ({title, co
     return response.data
 })
 
+const postsAdapter = createEntityAdapter({})
+
 export const postsSlice = createSlice({
     name: "posts",
-    initialState: {
-        posts: [],
+    initialState: postsAdapter.getInitialState({
         status: "idle",
         error: null
-    },
+    }),
     reducers: {
         postUpdated: (state, action) => {
             const {postId, title, content } = action.payload;
-            const existingPost = state.posts.find(post => post.id === postId);
+            const existingPost = state.entities[postId];
 
             if (existingPost) {
                 existingPost.title = title;
@@ -39,10 +40,9 @@ export const postsSlice = createSlice({
         },
         reactionAdded(state, action) {
             const { postId, reaction } = action.payload;
-            const existingPost = state.posts.find(post => post.id === postId);
 
-            if (existingPost) {
-                existingPost.reactions[reaction] += 1;
+            if (state.entities[postId]) {
+                state.entities[postId].reactions[reaction] += 1;
             }
         }
     },
@@ -50,17 +50,15 @@ export const postsSlice = createSlice({
         builder
             .addCase(fetchPosts.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.posts = action.payload;
+                postsAdapter.upsertMany(state, action.payload)
             })
             .addCase(addPost.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.posts.push(action.payload);
+                postsAdapter.addOne(action.payload);
             })
             .addCase(updatePost.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                console.log(action.payload)
-                const index = state.posts.find(post => post.id === action.payload.id);
-                state.posts[index] = action.payload;
+                postsAdapter.upodateOne(action.payload)
             })
             .addMatcher(
                 (action) => action.type.endsWith("rejected") && action.type.startsWith("posts"),
@@ -101,8 +99,12 @@ export default postsSlice.reducer;
 export const { postUpdated, reactionAdded } = postsSlice.actions
 
 //selectors
-export const selectAllPosts = state => state.posts.posts;
-export const selectPostById = (state, postId) => state.posts.posts.find(post => post.id === postId);
+export const {
+    selectAll: selectAllPosts,
+    selectById: selectPostById,
+    selectIds: selectPostIds
+} = postsAdapter.getSelectors(state => state.posts);
+
 export const selectPostsByUser = createSelector(
     [selectAllPosts, (state, userId) => userId], // input selectors
     // output selector, only rerun when input selectors return value changes
