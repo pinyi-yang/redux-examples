@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, nanoid } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
@@ -102,4 +102,9 @@ export const { postUpdated, reactionAdded } = postsSlice.actions
 
 //selectors
 export const selectAllPosts = state => state.posts.posts;
-export const selectPostById = (state, postId) => state.posts.posts.find(post => post.id === postId)
+export const selectPostById = (state, postId) => state.posts.posts.find(post => post.id === postId);
+export const selectPostsByUser = createSelector(
+    [selectAllPosts, (state, userId) => userId], // input selectors
+    // output selector, only rerun when input selectors return value changes
+    (posts, userId) => posts.filter(post => post.UserId === userId) 
+)
