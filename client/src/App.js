@@ -1,6 +1,6 @@
 import './App.css';
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
 import Home from './Home';
 import NavBar from './components/NavBar';
@@ -10,6 +10,7 @@ import { AddPostForm } from "./examples/Post/AddPostForm";
 import { SinglePostPage } from './examples/Post/SinglePostPage';
 import { EditPostForm } from './examples/Post/EditPostForm';
 import { UsersList } from "./examples/Users/UsersList";
+import { UserPage } from './examples/Users/UserPage';
 import { AddUserForm } from "./examples/Users/AddUserForm"
 
 function App() {
@@ -43,6 +44,8 @@ function App() {
               </React.Fragment>
             )}
           />
+          <Route exct path="/users/:userId" component={ UserPage }/>
+          <Redirect to="/" />
         </Switch>
       </Router>
       
